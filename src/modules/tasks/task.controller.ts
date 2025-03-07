@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { TasksService } from './application/tasks.service';
 import { Types } from 'mongoose';
-import { ApiBody, ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 @Controller('tasks')
 export class TasksController {
