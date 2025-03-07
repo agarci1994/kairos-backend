@@ -14,4 +14,12 @@ export class TasksRepository {
   async findById(taskId: string): Promise<Task | null> {
     return this.taskModel.findById(taskId).exec();
   }
+
+  async updateStatus(
+    taskId: string,
+    status: string,
+    images: { resolution: string; path: string }[],
+  ): Promise<void> {
+    await this.taskModel.findByIdAndUpdate(taskId, { status, images }).exec();
+  }
 }

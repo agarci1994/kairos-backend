@@ -14,6 +14,7 @@ export class TasksController {
   @Get(':taskId')
   async getTask(@Param('taskId') taskId: string) {
     const task = await this.tasksService.getTask(taskId);
+
     if (!task) {
       return { message: 'Task not found', statusCode: 404 };
     }

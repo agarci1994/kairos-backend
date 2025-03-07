@@ -13,7 +13,7 @@ export class Task extends Document {
   @Prop({ required: true })
   price: number;
 
-  @Prop({ type: [{ resolution: String, path: String }] })
+  @Prop({ type: [{ resolution: String, path: String }], _id: false })
   images?: { resolution: string; path: string }[];
 }
 
