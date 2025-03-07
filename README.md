@@ -1,98 +1,123 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Kairos Backend
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## 📖 Description
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Kairos Backend is a **NestJS with TypeScript** REST API that enables image processing and task querying. The API allows:
 
-## Description
+- Uploading an image and generating variants in different resolutions.
+- Querying the processing status of an image and its associated "price."
+- Data persistence in **MongoDB**.
+- Automated testing.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+---
 
-## Project setup
+## 🚀 Technologies Used
 
-```bash
-$ pnpm install
+- **NestJS** with **TypeScript**
+- **MongoDB** (using `mongoose` for modeling)
+- **Sharp** for image processing
+- **Jest** and **Supertest** for unit and integration testing
+- **ESLint and Prettier** for linting and code formatting
+
+---
+
+## 📂 Project Structure
+
+```
+kairos-backend/
+├── src/
+│   ├── modules/            # Main modules
+│   ├── common/             # Global configurations and utilities
+│   ├── main.ts             # Application entry point
+│   ├── app.module.ts       # NestJS root module
+├── test/                   # Integration tests
+├── scripts/                # Database initialization scripts
+├── .env                    # Environment variables
 ```
 
-## Compile and run the project
+---
 
-```bash
-# development
-$ pnpm run start
+## 📦 Installation
 
-# watch mode
-$ pnpm run start:dev
+1. **Clone the repository**
 
-# production mode
-$ pnpm run start:prod
+   ```sh
+   git clone https://github.com/your-username/kairos-backend.git
+   cd kairos-backend
+   ```
+
+2. **Install dependencies**
+
+   ```sh
+   pnpm install
+   ```
+
+3. **Set up environment variables** (Create a `.env` include PORT, MONGO_URI and MONGO_URI_TEST).
+
+4. **Run the script**  
+   
+   ```sh
+   npx ts-node scripts/seed.ts
+   ```
+
+5. **Run the application in development mode**
+
+   ```sh
+   pnpm run start
+   ```
+
+---
+
+## 📌 Endpoints
+
+### 📍 Create an image processing task
+
+- **Method:** `POST /tasks`
+- **Description:** Creates an image processing task.
+- **Request Body:**
+  ```json
+  {
+    "imagePath": "https://example.com/image.jpg"
+  }
+  ```
+- **Response:**
+  ```json
+  {
+    "taskId": "65d4a54b89c5e342b2c2c5f6",
+    "status": "pending",
+    "price": 25.50
+  }
+  ```
+
+### 📍 Query a task
+
+- **Method:** `GET /tasks/:taskId`
+- **Description:** Returns the task status and results.
+- **Response:**
+  ```json
+  {
+    "taskId": "65d4a54b89c5e342b2c2c5f6",
+    "status": "completed",
+    "price": 25.50,
+    "images": [
+      { "resolution": "1024", "path": "/output/image1/1024/abc123.jpg" },
+      { "resolution": "800", "path": "/output/image1/800/xyz456.jpg" }
+    ]
+  }
+  ```
+
+---
+
+## 🛠️ Testing
+
+Run unit tests with:
+
+```sh
+npm run test
 ```
 
-## Run tests
+For integration test:
 
-```bash
-# unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
+```sh
+npm run test:e2e
 ```
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ pnpm install -g mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
