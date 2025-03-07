@@ -77,7 +77,7 @@ kairos-backend/
 - **Request Body:**
   ```json
   {
-    "imagePath": "https://example.com/image.jpg"
+    "originalPath": "input/image.jpg"
   }
   ```
 - **Response:**
