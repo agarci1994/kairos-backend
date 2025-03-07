@@ -1,5 +1,14 @@
-import { Controller, Post, Get, Param, Body } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Get,
+  Param,
+  Body,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { TasksService } from './application/tasks.service';
+import { Types } from 'mongoose';
 
 @Controller('tasks')
 export class TasksController {
@@ -13,10 +22,13 @@ export class TasksController {
 
   @Get(':taskId')
   async getTask(@Param('taskId') taskId: string) {
+    if (!Types.ObjectId.isValid(taskId)) {
+      throw new HttpException('Id not valid', HttpStatus.BAD_REQUEST);
+    }
     const task = await this.tasksService.getTask(taskId);
 
     if (!task) {
-      return { message: 'Task not found', statusCode: 404 };
+      throw new HttpException('Task not found', HttpStatus.NOT_FOUND);
     }
     return {
       taskId: task._id,

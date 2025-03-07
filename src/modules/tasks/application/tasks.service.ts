@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { TasksRepository } from '../infrastructure/tasks.repository';
 import { Task } from '../domain/task.schema';
-import { TaskStatus } from 'src/common/enums';
+import { TaskStatus } from '../../../common/enums';
 import { ImageProcessor } from '../infrastructure/image-processor.service';
 
 @Injectable()
@@ -18,6 +18,7 @@ export class TasksService {
       status: TaskStatus.Pending,
       price,
     });
+
     try {
       const processedImages =
         await this.imageProcessor.processImage(originalPath);
@@ -27,7 +28,6 @@ export class TasksService {
         processedImages,
       );
     } catch (e) {
-      console.error(e);
       await this.tasksRepository.updateStatus(
         task._id as string,
         TaskStatus.Failed,

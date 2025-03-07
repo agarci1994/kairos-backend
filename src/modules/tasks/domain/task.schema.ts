@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { TaskStatus } from 'src/common/enums';
+import { TaskStatus } from '../../../common/enums';
 
 @Schema({ timestamps: true })
 export class Task extends Document {

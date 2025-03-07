@@ -1,25 +1,70 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { App } from 'supertest/types';
-import { AppModule } from './../src/app.module';
+import { AppModule } from '../src/app.module';
+import { MongooseModule } from '@nestjs/mongoose';
 
-describe('AppController (e2e)', () => {
-  let app: INestApplication<App>;
+describe('Tasks API (E2E)', () => {
+  let app: INestApplication;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [
+        AppModule,
+        MongooseModule.forRoot(process.env.MONGO_URI_TEST || ''),
+      ],
     }).compile();
 
     app = moduleFixture.createNestApplication();
     await app.init();
   });
 
-  it('/ (GET)', () => {
-    return request(app.getHttpServer())
-      .get('/')
-      .expect(200)
-      .expect('Hello World!');
+  afterAll(async () => {
+    await app.close();
+  });
+
+  it('POST - /tasks - 201', async () => {
+    const response = await request(app.getHttpServer())
+      .post('/tasks')
+      .send({ originalPath: 'input/image.jpeg' })
+      .expect(201);
+
+    expect(response.body).toHaveProperty('taskId');
+    expect(response.body).toHaveProperty('price');
+    expect(response.body.status).toEqual('pending');
+  });
+
+  it('GET - /task/:taskid - 200 - status failed', async () => {
+    const createResponse = await request(app.getHttpServer())
+      .post('/tasks')
+      .send({ originalPath: 'error.jpg' });
+    const taskId = createResponse.body.taskId as string;
+
+    const response = await request(app.getHttpServer())
+      .get(`/tasks/${taskId}`)
+      .expect(200);
+
+    expect(response.body).toHaveProperty('images');
+    expect(response.body.status).toEqual('failed');
+  });
+
+  it('GET - /task/:taskid - 200 - status completed', async () => {
+    const createResponse = await request(app.getHttpServer())
+      .post('/tasks')
+      .send({ originalPath: 'input/imagen.jpeg' });
+    const taskId = createResponse.body.taskId as string;
+
+    const response = await request(app.getHttpServer())
+      .get(`/tasks/${taskId}`)
+      .expect(200);
+
+    expect(response.body).toHaveProperty('images');
+    expect(response.body.images.length).toEqual(2);
+    expect(response.body.status).toEqual('completed');
+  });
+
+  it('/GET - 404', async () => {
+    const taskId = '67caf222d81c9b0658910301';
+    await request(app.getHttpServer()).get(`/tasks/${taskId}`).expect(404);
   });
 });
