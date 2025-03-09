@@ -23,7 +23,7 @@ Kairos Backend is a **NestJS with TypeScript** REST API that enables image proce
 
 ## 📂 Project Structure
 
-```
+```ini
 kairos-backend/
 ├── src/
 │   ├── modules/            # Main modules
@@ -41,30 +41,30 @@ kairos-backend/
 
 1. **Clone the repository**
 
-   ```sh
-   git clone https://github.com/your-username/kairos-backend.git
-   cd kairos-backend
-   ```
+```sh
+git clone https://github.com/your-username/kairos-backend.git
+cd kairos-backend
+```
 
 2. **Install dependencies**
 
-   ```sh
-   pnpm install
-   ```
+```sh
+pnpm install
+```
 
-3. **Set up environment variables** (Create a `.env` include PORT, MONGO_URI and MONGO_URI_TEST).
+3. __Set up environment variables__ (Create a `.env` include PORT, MONGO_URI and MONGO_URI_TEST).
 
-4. **Run the script**  
-   
-   ```sh
-   npx ts-node scripts/seed.ts
-   ```
+4. **Run the script**
+
+```sh
+npx ts-node scripts/seed.ts
+```
 
 5. **Run the application in development mode**
 
-   ```sh
-   pnpm run start
-   ```
+```sh
+pnpm run start
+```
 
 ---
 
@@ -73,38 +73,46 @@ kairos-backend/
 ### 📍 Create an image processing task
 
 - **Method:** `POST /tasks`
+
 - **Description:** Creates an image processing task.
+
 - **Request Body:**
-  ```json
-  {
-    "imagePath": "https://example.com/image.jpg"
-  }
-  ```
+
+```json
+{
+  "imagePath": "input/imagen.jpeg"
+}
+```
+
 - **Response:**
-  ```json
-  {
-    "taskId": "65d4a54b89c5e342b2c2c5f6",
-    "status": "pending",
-    "price": 25.50
-  }
-  ```
+
+```json
+{
+  "taskId": "65d4a54b89c5e342b2c2c5f6",
+  "status": "pending",
+  "price": 25.50
+}
+```
 
 ### 📍 Query a task
 
 - **Method:** `GET /tasks/:taskId`
+
 - **Description:** Returns the task status and results.
+
 - **Response:**
-  ```json
-  {
-    "taskId": "65d4a54b89c5e342b2c2c5f6",
-    "status": "completed",
-    "price": 25.50,
-    "images": [
-      { "resolution": "1024", "path": "/output/image1/1024/abc123.jpg" },
-      { "resolution": "800", "path": "/output/image1/800/xyz456.jpg" }
-    ]
-  }
-  ```
+
+```json
+{
+  "taskId": "65d4a54b89c5e342b2c2c5f6",
+  "status": "completed",
+  "price": 25.50,
+  "images": [
+    { "resolution": "1024", "path": "/output/image1/1024/abc123.jpg" },
+    { "resolution": "800", "path": "/output/image1/800/xyz456.jpg" }
+  ]
+}
+```
 
 ---
 
